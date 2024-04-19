@@ -19,17 +19,27 @@ public class main {
         boolean end = false;
         char[][] board = new char[3][3];
         initBoard(board);
-
         while (!end) {
             drawBoard(board);
 
             makeMove(currentPlayer, board);
-            // checkForWinner(0, board);
+            System.out.println(checkForWinner('x', board));
+            if (checkForWinner(currentPlayer, board) == true) {
+                end = true;
+                System.out.println("Player " + currentPlayer + " won!" );
+                
+            }
+            else if (checkIfFull(board)) {
+                end = true;
+                System.out.println("Draw!" );
+            }
+            else{
             if (currentPlayer == 'x') {
                 currentPlayer = 'o';
             } else {
                 currentPlayer = 'x';
             }
+        }
         }
 
     }
@@ -77,9 +87,11 @@ public class main {
     }
 
     public static void makeMove(char player, char[][] board) {
-        System.out.println("where do you want to place " + player + " on the x axis? (1 - 3)");
+        boolean validMove = false;
+    while (!validMove) {
+        System.out.println("Where do you want to place " + player + " on the x axis? (1 - 3)");
         int xPos = reader.nextInt();
-        System.out.println("where do you want to place " + player + " on the y axis? (a - c)");
+        System.out.println("Where do you want to place " + player + " on the y axis? (a - c)");
         char yPos = reader.next().charAt(0);
         int y = 0;
         xPos -= 1;
@@ -92,13 +104,31 @@ public class main {
         }
         if (checkIfValid(yPos, xPos, board)) {
             board[xPos][y] = player;
+            validMove = true; // Set validMove to true to exit the loop
         } else {
-            System.out.println("no sir");
+            System.out.println("Invalid move! Try again.");
         }
+    }
+    
+        
+        
 
+    }
+    public static boolean checkIfFull(char[][] board){
+        boolean isFull = true;
+        for(int y =0; y<board.length; y++){
+            for(int x = 0; x< board[0].length; x++){
+                if (board[y][x] == ' ') {
+                    isFull = false;
+                }
+
+            }
+        }
+        return isFull;
     }
 
     public static boolean checkIfValid(char yPos, int xPos, char[][] board) {
+        
         int y = 0;
         if (yPos == 'a') {
             y = 0;
@@ -106,6 +136,12 @@ public class main {
             y = 1;
         } else if (yPos == 'c') {
             y = 2;
+        }
+        else {
+            return false;
+        }
+        if (xPos < 0 || xPos > board.length) {
+            return false; // Invalid xPos
         }
         if (board[xPos][y] == ' ') {
             return true;
@@ -115,23 +151,25 @@ public class main {
         }
     }
 
-    public static void checkForWinner(char player, char[][] board) {
-        // check for the wiiner
-        /*
-         * 
-         * פעולה 7 - פעולת checkForWinner :
-         * • הפעולה מקבלת כפרמטרים:
-         * .1 את לוח המשחק
-         * .2 את סימן השחקן הנוכחי )X או O)
-         * 
-         * • תפקיד הפעולה הוא לבדוק האם השחקן ניצח.
-         * • קריטריונים לניצחון )מספיק אחד מהשלושה(:
-         * .1 לשחקן יש שלושה סימונים שלו באותה השורה
-         * .2 לשחקן יש שלושה סימונים שלו באותה העמודה
-         * .3 לשחקן יש שלושה סימונים שלו באחד האלכסונים
-         * 
-         * • הפעולה תחזיר true במידה והשחקן ניצח, אחרת תחזיר false
-         */
-    }
+    public static boolean checkForWinner(char player, char[][] board) {
+        for (int i = 0; i < 3; i++) {
+            if (board[i][0] == player && board[i][1] == player && board[i][2] == player) {
+                return true;
+            }
+        }
 
+        for (int i = 0; i < 3; i++) {
+            if (board[0][i] == player && board[1][i] == player && board[2][i] == player) {
+                return true;
+            }
+        }
+
+        if ((board[0][0] == player && board[1][1] == player && board[2][2] == player) ||
+                (board[0][2] == player && board[1][1] == player && board[2][0] == player)) {
+            return true;
+        }
+    
+        return false;
+    }
+    
 }
