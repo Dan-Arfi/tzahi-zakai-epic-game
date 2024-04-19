@@ -2,14 +2,16 @@ import java.util.*;
 
 public class main {
     static Scanner reader = new Scanner(System.in);
-
+   public static String oName;
+    public static String xName;
     public static void main(String[] args) {
 
         System.out.println("name of player X: ");
-        String xName = reader.nextLine();
+        xName = reader.nextLine();
 
         System.out.println("name of player O: ");
-        String oName = reader.nextLine();
+        xName = reader.nextLine();
+        
         playGame();
 
     }
@@ -24,9 +26,14 @@ public class main {
 
             makeMove(currentPlayer, board);
             System.out.println(checkForWinner('x', board));
-            if (checkForWinner(currentPlayer, board) == true) {
+            if (checkForWinner(currentPlayer, board)) {
                 end = true;
-                System.out.println("Player " + currentPlayer + " won!" );
+                if (currentPlayer == 'x') {
+                    System.out.println(xName + " won!" );
+                } else {
+                    System.out.println( oName + " won!" );
+                }
+                
                 
             }
             else if (checkIfFull(board)) {
@@ -104,7 +111,7 @@ public class main {
         }
         if (checkIfValid(yPos, xPos, board)) {
             board[xPos][y] = player;
-            validMove = true; // Set validMove to true to exit the loop
+            validMove = true; 
         } else {
             System.out.println("Invalid move! Try again.");
         }
@@ -141,7 +148,7 @@ public class main {
             return false;
         }
         if (xPos < 0 || xPos > board.length) {
-            return false; // Invalid xPos
+            return false;
         }
         if (board[xPos][y] == ' ') {
             return true;
