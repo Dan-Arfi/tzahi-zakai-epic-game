@@ -147,7 +147,7 @@ public class main {
         else {
             return false;
         }
-        if (xPos < 0 || xPos > board.length) {
+        if (xPos < 0 || xPos+1 > board.length) {
             return false;
         }
         if (board[xPos][y] == ' ') {
@@ -159,23 +159,43 @@ public class main {
     }
 
     public static boolean checkForWinner(char player, char[][] board) {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < board.length; i++) {
             if (board[i][0] == player && board[i][1] == player && board[i][2] == player) {
                 return true;
             }
         }
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < board.length; i++) {
             if (board[0][i] == player && board[1][i] == player && board[2][i] == player) {
                 return true;
             }
         }
-
-        if ((board[0][0] == player && board[1][1] == player && board[2][2] == player) ||
-                (board[0][2] == player && board[1][1] == player && board[2][0] == player)) {
-            return true;
+        char previous_figure = player;
+        boolean win_diag = true;
+        for(int i = 0; i< board.length; i++){
+            if (board[i][i] == previous_figure && board[i][i] == player) {
+                previous_figure = board[i][i];
+            }
+            else{
+                win_diag = false;
+            }
+            if (i == board.length-1 && win_diag == true) {
+                return true;
+            }
         }
-    
+        previous_figure = player;
+        win_diag = true;
+        for(int i = 0; i< board.length; i++){
+            if (board[i][board.length-i-1] == previous_figure && board[i][board.length-i-1] == player) {
+                previous_figure = board[i][board.length-i-1];
+            }
+            else{
+                win_diag = false;
+            }
+            if (i == board.length-1 && win_diag == true) {
+                return true;
+            }
+        }
         return false;
     }
     
